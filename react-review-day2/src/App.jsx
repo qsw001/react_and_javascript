@@ -9,7 +9,7 @@ function App() {
 
   const [todos, setTodos] = useState([
     {id:1, text:"学习tool"},
-    {id:1, text:"学习message"},
+    {id:2, text:"学习message"},
   ]);
 
   //写成函数的目的是保证每次调用时值不同
@@ -19,9 +19,14 @@ function App() {
     const t = text.trim();
     if(!t) return;
 
-    const newTodo = {id:createId, text: t};
+    const newTodo = {id:createId(), text: t};
     setTodos(prew => [newTodo, ...prew]);
     setText("");
+  }
+
+  //删除某一项
+  const removeTodo = (id) => {
+    setTodos((prew)=>prew.filter((x)=>x.id!=id));//filter为筛选的意思，它等同于创建一个新数组，将筛选的数组放入新数组中，等效于删除
   }
 
   const canAdd = text.trim().length>0 
@@ -36,7 +41,7 @@ function App() {
           value={text}
           onChange={e=>setText(e.target.value)}
           placeholder="输入待办事项"
-          onPressEnter={()=>canAdd&&addTodo}
+          onPressEnter={() => canAdd && addTodo()}
           allowClear
         />
         <Button type="primary" onClick={addTodo} disabled={!canAdd}>
@@ -49,7 +54,17 @@ function App() {
       ) : (
         <List
             dataSource={todos}
-            renderItem={(todo)=><List.Item>{todo.text}</List.Item>}
+            renderItem={(todo)=>(
+              <List.Item
+                actions={[
+                  <Button danger type="link" key="del" onClick={() => removeTodo(todo.id)}>
+                    删除
+                  </Button>
+                ]}
+              >
+                {todo.text}
+              </List.Item>
+            )}
         />
       )}
 
