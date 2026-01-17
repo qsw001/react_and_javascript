@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, Empty, Input, List, Space, Typography } from "antd";
+import { Button, Empty, List, Typography } from "antd";
+import TodoInput from "./components/TodoInput"
 
 const { Title } = Typography;
 
@@ -29,25 +30,14 @@ function App() {
     setTodos((prew)=>prew.filter((x)=>x.id!=id));//filter为筛选的意思，它等同于创建一个新数组，将筛选的数组放入新数组中，等效于删除
   }
 
-  const canAdd = text.trim().length>0 
+  const canAdd = text.trim().length > 0 
 
   return (
     <div style={{ maxWidth: 720, margin: "40px auto", padding: 16 }}>
       <Title level={3} style={{marginTop: 0}}>
         Todo mini
       </Title>
-      <Space.Compact style={{width: "100%"}}>
-        <Input
-          value={text}
-          onChange={e=>setText(e.target.value)}
-          placeholder="输入待办事项"
-          onPressEnter={() => canAdd && addTodo()}
-          allowClear
-        />
-        <Button type="primary" onClick={addTodo} disabled={!canAdd}>
-          添加
-        </Button>
-      </Space.Compact>
+      <TodoInput text={text} setText={setText} addTodo={addTodo} canAdd={canAdd}/>
 
       {todos.length === 0 ? (
         <Empty description="没有待办事项"/>
